@@ -17,195 +17,319 @@
         }
 
         body {
-            background: linear-gradient(rgb(205 188 209), rgb(189 0 0 / 72%)), url(https://www.apras.org.br/wp-content/uploads/2025/09/AMIGAO.jpeg);
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            overflow-x: hidden;
+            position: relative;
         }
 
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* --- PAINEL DE TESTE DOS CLIMAS --- */
+        .painel-teste {
+            position: fixed;
+            top: 10px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: flex;
+            gap: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .painel-teste button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .painel-teste button:hover, .painel-teste button.ativo {
+            background: #ff0055;
+            font-weight: bold;
+        }
+
+        /* --- PRELOADER --- */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0d0f18;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        .preloader-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .svg-loader {
+            width: 120px;
+            height: 120px;
+            position: relative;
+        }
+
+        .svg-loader svg {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .ring-outer {
+            animation: rotateHorario 4s linear infinite;
+            transform-origin: center;
+        }
+
+        .ring-inner {
+            animation: rotateAntiHorario 3s linear infinite;
+            transform-origin: center;
+        }
+
+        @keyframes rotateHorario {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes rotateAntiHorario {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
+        }
+
+        .preloader-title {
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 20px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .preloader-counter {
+            color: #00e5ff;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-top: 8px;
+            font-family: monospace;
+        }
+
+        /* --- APP CARD --- */
         @keyframes tremorCiclo {
-            0%, 80% {
-                transform: translate(0, 0);
-            }
-            84% {
-                transform: translate(4px, 0);   /* Direita */
-            }
-            88% {
-                transform: translate(-4px, 0);  /* Esquerda */
-            }
-            92% {
-                transform: translate(0, -4px);  /* Cima */
-            }
-            96% {
-                transform: translate(0, 4px);   /* Baixo */
-            }
-            100% {
-                transform: translate(0, 0);
-            }
+            0%, 80% { transform: translate(0, 0); }
+            84% { transform: translate(4px, 0); }
+            88% { transform: translate(-4px, 0); }
+            92% { transform: translate(0, -4px); }
+            96% { transform: translate(0, 4px); }
+            100% { transform: translate(0, 0); }
         }
 
         .card-flutuante {
-            opacity:1;
-            background-color: #e53935;
+            position: relative;
+            z-index: 10;
+            background-color:rgb(165 99 192 / 92%);
+            backdrop-filter: blur(8px);
             color: #ffffff;
             width: 100%;
             max-width: 420px;
-            padding: 35px 30px;
+            padding: 25px 20px;
             border-radius: 16px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 
-                        0 10px 15px rgba(0, 0, 0, 0.2);
-            transition: box-shadow 0.3s ease;
-            
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
             animation: tremorCiclo 5s infinite ease-in-out;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
         }
 
-        .card-flutuante:hover {
-            
-           box-shadow: 0 25px 50px rgba(0, 0, 0, 1.5), 
-                        0 15px 20px rgba(0, 0, 0, 1.3);
+        .card-flutuante.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .saudacao-bar {
+            background-color: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            padding: 8px 12px;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: capitalize;
         }
 
         .card-flutuante h1 {
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             font-weight: 600;
-            letter-spacing: 0.5px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .jornada-section {
-            margin-bottom: 22px;
-            background-color: rgba(0, 0, 0, 0.15);
-            padding: 15px;
+            margin-bottom: 18px;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 12px;
             border-radius: 10px;
         }
 
         .jornada-section label.titulo-pergunta {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 600;
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .radio-options {
             display: flex;
             justify-content: space-between;
-            gap: 10px;
+            gap: 8px;
         }
 
         .radio-label {
             flex: 1;
             background-color: rgba(255, 255, 255, 0.15);
-            padding: 8px 6px;
+            padding: 8px 4px;
             border-radius: 6px;
             text-align: center;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 5px;
-        }
-
-        .radio-label:hover {
-            background-color: rgba(255, 255, 255, 0.25);
+            gap: 4px;
         }
 
         .input-group {
-            margin-bottom: 18px;
+            margin-bottom: 14px;
             display: flex;
             flex-direction: column;
         }
 
         .input-group label {
-            font-size: 0.95rem;
-            margin-bottom: 6px;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
             font-weight: 500;
         }
 
         .input-group input {
-            padding: 12px 14px;
+            padding: 10px 12px;
             border: none;
             border-radius: 8px;
             font-size: 1rem;
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: rgba(255, 255, 255, 0.95);
             color: #333;
             outline: none;
-            transition: background-color 0.2s, box-shadow 0.2s;
-        }
-
-        .input-group input:focus {
-            background-color: #ffffff;
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
         }
 
         .btn-calcular {
             width: 100%;
-            padding: 14px;
-            background-color: #212121;
+            padding: 12px;
+            background-color: #1a1a1a;
             color: #ffffff;
             border: none;
             border-radius: 8px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 10px;
-            transition: background-color 0.2s, transform 0.1s;
-        }
-
-        .btn-calcular:hover {
-            background-color: #000000;
-        }
-
-        .btn-calcular:active {
-            transform: scale(0.98);
+            margin-top: 5px;
         }
 
         .resultado {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: rgba(0, 0, 0, 0.3);
+            margin-top: 15px;
+            padding: 12px;
+            background-color: rgba(0, 0, 0, 0.35);
             border-radius: 10px;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             display: none;
-            line-height: 1.5;
+            line-height: 1.4;
         }
 
         .resultado p {
-            margin-bottom: 6px;
-        }
-
-        .resultado p:last-child {
-            margin-bottom: 0;
+            margin-bottom: 4px;
         }
     </style>
 </head>
 <body>
 
-    <div class="card-flutuante">
-        <h1>Calculo de Horário.</h1>
+    <!-- Botões Rápidos para Testar os Climas -->
+    <!--<div class="painel-teste">
+        <span style="color:#fff; font-size:0.75rem; align-self:center; margin-right:4px;">Clima:</span>
+        <button onclick="mudarClimaManual('limpo')" id="btn-limpo">☀️ Limpo</button>
+        <button onclick="mudarClimaManual('nublado')" id="btn-nublado">☁️ Nublado</button>
+        <button onclick="mudarClimaManual('chuva')" id="btn-chuva">🌧️ Chuva</button>
+    </div>-->
+     
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="preloader-content">
+            <div class="svg-loader">
+                <svg viewBox="0 0 100 100">
+                    <defs>
+                        <linearGradient id="gradOuter" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ff0055" />
+                            <stop offset="100%" stop-color="#ffbe0b" />
+                        </linearGradient>
+                    </defs>
+                    <circle class="ring-outer" cx="50" cy="50" r="44" fill="none" stroke="url(#gradOuter)" stroke-width="4" stroke-dasharray="200 70" stroke-linecap="round" />
+                </svg>
+                <svg viewBox="0 0 100 100">
+                    <defs>
+                        <linearGradient id="gradInner" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#00e5ff" />
+                            <stop offset="100%" stop-color="#3a86ff" />
+                        </linearGradient>
+                    </defs>
+                    <circle class="ring-inner" cx="50" cy="50" r="32" fill="none" stroke="url(#gradInner)" stroke-width="4" stroke-dasharray="130 50" stroke-linecap="round" />
+                </svg>
+            </div>
+            <div class="preloader-title">Carregando sistema...</div>
+            <div class="preloader-counter" id="preloader-counter">0%</div>
+        </div>
+    </div>
+
+    <!-- App Main Card -->
+    <div class="card-flutuante" id="card-app">
+        <div class="saudacao-bar" id="saudacao-bar">Consultando Dourados-MS...</div>
+        <h1>Cálculo de Horário.</h1>
         
         <form id="form-horarios">
             <div class="jornada-section">
                 <label class="titulo-pergunta">Qual a sua jornada de trabalho?</label>
                 <div class="radio-options">
-                    <label class="radio-label">
-                        <input type="radio" name="jornada" value="07:00" required> 07:00
-                    </label>
-                    <label class="radio-label">
-                        <input type="radio" name="jornada" value="08:00"> 08:00
-                    </label>
-                    <label class="radio-label">
-                        <input type="radio" name="jornada" value="07:15"> 07:15
-                    </label>
+                    <label class="radio-label"><input type="radio" name="jornada" value="07:00" required> 07:00</label>
+                    <label class="radio-label"><input type="radio" name="jornada" value="08:00"> 08:00</label>
+                    <label class="radio-label"><input type="radio" name="jornada" value="07:15"> 07:15</label>
                 </div>
             </div>
 
@@ -236,18 +360,234 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Efeito de pérolas coloridas apenas ao entrar na página
-            if (typeof confetti === 'function') {
-                confetti({
-                    particleCount: 80,
-                    spread: 70,
-                    origin: { y: 0.6 },
-                    shapes: ['circle'],
-                    colors: ['#ff0055', '#00e5ff', '#ffbe0b', '#ffffff']
+        // --- PRELOADER ---
+        let count = 0;
+        const counterEl = document.getElementById('preloader-counter');
+        const preloader = document.getElementById('preloader');
+        const cardApp = document.getElementById('card-app');
+
+        const loadInterval = setInterval(() => {
+            count += 4;
+            if (count >= 100) {
+                count = 100;
+                counterEl.textContent = count + '%';
+                clearInterval(loadInterval);
+
+                setTimeout(() => {
+                    preloader.style.opacity = '0';
+                    preloader.style.visibility = 'hidden';
+                    cardApp.classList.add('visible');
+
+                    if (typeof confetti === 'function') {
+                        confetti({
+                            particleCount: 80,
+                            spread: 70,
+                            origin: { y: 0.6 },
+                            shapes: ['circle'],
+                            colors: ['#ff0055', '#00e5ff', '#ffbe0b', '#ffffff']
+                        });
+                    }
+                }, 1500);
+            } else {
+                counterEl.textContent = count + '%';
+            }
+        }, 40);
+
+        // --- SISTEMA DE CLIMA (DOURADOS - MS) & BACKGROUND CANVAS ---
+        const bgCanvas = document.getElementById('bg-canvas');
+        const bgCtx = bgCanvas.getContext('2d');
+
+        let currentPeriod = 'dia'; // 'dia', 'tarde', 'noite'
+        let currentWeather = 'limpo'; // 'limpo', 'nublado', 'chuva'
+        let currentTemp = '';
+
+        function resizeBgCanvas() {
+            bgCanvas.width = window.innerWidth;
+            bgCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeBgCanvas);
+        resizeBgCanvas();
+
+        // Partículas de Chuva
+        let rainDrops = Array.from({ length: 90 }, () => ({
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
+            length: Math.random() * 15 + 10,
+            speed: Math.random() * 8 + 6,
+            opacity: Math.random() * 0.4 + 0.3
+        }));
+
+        // Estrelas da noite
+        let stars = Array.from({ length: 40 }, () => ({
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
+            size: Math.random() * 2 + 0.5,
+            alpha: Math.random()
+        }));
+
+        function atualizarSaudacao() {
+            const saudacaoBar = document.getElementById('saudacao-bar');
+            let textoSaudacao = '';
+            let emojiClima = '';
+
+            if (currentPeriod === 'dia') textoSaudacao = '☀️ Bom dia';
+            else if (currentPeriod === 'tarde') textoSaudacao = '🌅 Boua tarde';
+            else textoSaudacao = '🌙 Boua noite';
+
+            if (currentWeather === 'chuva') emojiClima = '🌧️ Chuva';
+            else if (currentWeather === 'nublado') emojiClima = '☁️ Nublado';
+            else emojiClima = '☀️ Limpo';
+
+            const tempInfo = currentTemp ? ` ${currentTemp}°C` : '';
+            saudacaoBar.textContent = `${textoSaudacao} | Dourados${tempInfo} ${emojiClima}`;
+
+            // Botões de teste
+            ['limpo', 'nublado', 'chuva'].forEach(c => {
+                const btn = document.getElementById('btn-' + c);
+                if (btn) btn.classList.toggle('ativo', c === currentWeather);
+            });
+        }
+
+        function mudarClimaManual(clima) {
+            currentWeather = clima;
+            atualizarSaudacao();
+        }
+
+        // Consulta API de Clima Real em Dourados-MS (Latitude: -22.2231, Longitude: -54.8064)
+        async function carregarClimaDourados() {
+            const now = new Date();
+            const hours = now.getHours();
+
+            if (hours >= 5 && hours < 12) currentPeriod = 'dia';
+            else if (hours >= 12 && hours < 18) currentPeriod = 'tarde';
+            else currentPeriod = 'noite';
+
+            try {
+                const url = 'https://api.open-meteo.com/v1/forecast?latitude=-22.2231&longitude=-54.8064&current_weather=true';
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data && data.current_weather) {
+                    currentTemp = Math.round(data.current_weather.temperature);
+                    const code = data.current_weather.weathercode;
+
+                    // Mapeamento Códigos WMO: Chuva (51-99), Nublado (1-3, 45-48), Limpo (0)
+                    if (code >= 51 && code <= 99) {
+                        currentWeather = 'chuva';
+                    } else if (code >= 1 && code <= 48) {
+                        currentWeather = 'nublado';
+                    } else {
+                        currentWeather = 'limpo';
+                    }
+                }
+            } catch (err) {
+                console.log('Modo offline: usando clima padrão.');
+            } finally {
+                atualizarSaudacao();
+            }
+        }
+        carregarClimaDourados();
+
+        // Renderização Animada por Clima e Horário
+        function renderBackground() {
+            const w = bgCanvas.width;
+            const h = bgCanvas.height;
+
+            // Base de Cores do Período
+            if (currentWeather === 'chuva') {
+                // Fundo escuro de chuva
+                let grad = bgCtx.createLinearGradient(0, 0, 0, h);
+                grad.addColorStop(0, '#1a2a3a');
+                grad.addColorStop(1, '#0d1520');
+                bgCtx.fillStyle = grad;
+                bgCtx.fillRect(0, 0, w, h);
+
+                // Desenhar Chuva
+                bgCtx.strokeStyle = 'rgba(174, 194, 224, 0.6)';
+                bgCtx.lineWidth = 1.5;
+                bgCtx.beginPath();
+                rainDrops.forEach(d => {
+                    bgCtx.moveTo(d.x, d.y);
+                    bgCtx.lineTo(d.x - 2, d.y + d.length);
+                    d.y += d.speed;
+                    d.x -= 0.5;
+                    if (d.y > h) {
+                        d.y = -20;
+                        d.x = Math.random() * w;
+                    }
                 });
+                bgCtx.stroke();
+
+            } else if (currentWeather === 'nublado') {
+                // Fundo Nublado
+                let grad = bgCtx.createLinearGradient(0, 0, 0, h);
+                grad.addColorStop(0, '#4b6cb7');
+                grad.addColorStop(1, '#182848');
+                bgCtx.fillStyle = grad;
+                bgCtx.fillRect(0, 0, w, h);
+
+                // Nuvens densas
+                bgCtx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+                bgCtx.beginPath();
+                bgCtx.arc(w * 0.3, h * 0.2, 90, 0, Math.PI * 2);
+                bgCtx.arc(w * 0.5, h * 0.25, 110, 0, Math.PI * 2);
+                bgCtx.arc(w * 0.7, h * 0.18, 85, 0, Math.PI * 2);
+                bgCtx.fill();
+
+            } else {
+                // Clima Limpo / Ensolarado
+                if (currentPeriod === 'dia') {
+                    let grad = bgCtx.createLinearGradient(0, 0, 0, h);
+                    grad.addColorStop(0, '#2980b9');
+                    grad.addColorStop(1, '#6dd5fa');
+                    bgCtx.fillStyle = grad;
+                    bgCtx.fillRect(0, 0, w, h);
+
+                    bgCtx.fillStyle = '#ffea00';
+                    bgCtx.beginPath();
+                    bgCtx.arc(w * 0.8, h * 0.2, 35, 0, Math.PI * 2);
+                    bgCtx.fill();
+                } else if (currentPeriod === 'tarde') {
+                    let grad = bgCtx.createLinearGradient(0, 0, 0, h);
+                    grad.addColorStop(0, '#2c3e50');
+                    grad.addColorStop(0.5, '#fd746c');
+                    grad.addColorStop(1, '#ff9966');
+                    bgCtx.fillStyle = grad;
+                    bgCtx.fillRect(0, 0, w, h);
+
+                    bgCtx.fillStyle = '#ffcc00';
+                    bgCtx.beginPath();
+                    bgCtx.arc(w * 0.5, h * 0.65, 50, 0, Math.PI * 2);
+                    bgCtx.fill();
+                } else {
+                    let grad = bgCtx.createLinearGradient(0, 0, 0, h);
+                    grad.addColorStop(0, '#0b0d17');
+                    grad.addColorStop(1, '#1c233e');
+                    bgCtx.fillStyle = grad;
+                    bgCtx.fillRect(0, 0, w, h);
+
+                    bgCtx.fillStyle = '#ffffff';
+                    stars.forEach(s => {
+                        bgCtx.globalAlpha = s.alpha;
+                        bgCtx.beginPath();
+                        bgCtx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+                        bgCtx.fill();
+                    });
+                    bgCtx.globalAlpha = 1;
+
+                    bgCtx.fillStyle = '#e0e6ed';
+                    bgCtx.beginPath();
+                    bgCtx.arc(w * 0.8, h * 0.2, 30, 0, Math.PI * 2);
+                    bgCtx.fill();
+                }
             }
 
+            requestAnimationFrame(renderBackground);
+        }
+        renderBackground();
+
+        // --- CÁLCULO ---
+        document.addEventListener('DOMContentLoaded', function() {
             const botao = document.getElementById('btn-calcular');
             
             botao.addEventListener('click', function() {
@@ -259,18 +599,18 @@
                 const divResultado = document.getElementById('resultado');
 
                 if (!jornadaSelecionada) {
-                    alert('Por favor, selecione a sua jornada de trabalho!');
+                    alert('Selecione a jornada!');
                     return;
                 }
 
                 if (!entrada || !saidaIntervalo || !voltaIntervalo || !saida) {
-                    alert('Por favor, preencha todos os horários!');
+                    alert('Preencha todos os horários!');
                     return;
                 }
 
                 function paraMinutos(horario) {
-                    const [horas, minutos] = horario.split(':').map(Number);
-                    return horas * 60 + minutos;
+                    const [h, m] = horario.split(':').map(Number);
+                    return h * 60 + m;
                 }
 
                 function formatarHoras(minutosTotais) {
@@ -285,20 +625,7 @@
                 const minSaida = paraMinutos(saida);
 
                 const minutosIntervalo = minVoltaIntervalo - minSaidaIntervalo;
-                const periodoManha = minSaidaIntervalo - minEntrada;
-                const periodoTarde = minSaida - minVoltaIntervalo;
-                const totalMinutosTrabalho = periodoManha + periodoTarde;
-
-                if (totalMinutosTrabalho < 0 || minutosIntervalo < 0) {
-                    divResultado.style.display = 'block';
-                    divResultado.innerHTML = '⚠️ Verifique se os horários informados estão na ordem correta.';
-                    return;
-                }
-
-                let textoIntervalo = `🕒 Horas do intervalo: ${formatarHoras(minutosIntervalo)}`;
-                if (minutosIntervalo > 120) {
-                    textoIntervalo += '<br>⚠️ intervalo maior que 2 hrs';
-                }
+                const totalMinutosTrabalho = (minSaidaIntervalo - minEntrada) + (minSaida - minVoltaIntervalo);
 
                 const [jornadaH, jornadaM] = jornadaSelecionada.value.split(':').map(Number);
                 const totalMinutosJornada = jornadaH * 60 + jornadaM;
@@ -308,36 +635,32 @@
 
                 if (totalMinutosTrabalho === totalMinutosJornada) {
                     textoJornada = '✅ Horas batem com a jornada escolhida (Tudo OK!).';
-                    bateuMeta = true; // Marca que bateu certinho exato
+                    bateuMeta = true;
                 } else if (totalMinutosTrabalho > totalMinutosJornada) {
-                    const diff = totalMinutosTrabalho - totalMinutosJornada;
-                    textoJornada = `⚡ Acima da jornada (${formatarHoras(diff)} a mais).`;
+                    textoJornada = `⚡ Acima (${formatarHoras(totalMinutosTrabalho - totalMinutosJornada)} a mais).`;
                 } else {
-                    const diff = totalMinutosJornada - totalMinutosTrabalho;
-                    textoJornada = `⚠️ Abaixo da jornada (${formatarHoras(diff)} faltando).`;
+                    textoJornada = `⚠️ Abaixo (${formatarHoras(totalMinutosJornada - totalMinutosTrabalho)} faltando).`;
                 }
 
                 divResultado.style.display = 'block';
                 divResultado.innerHTML = `
-                    <p><b>⏱️ Total Trabalhado:</b> ${formatarHoras(totalMinutosTrabalho)}</p>
-                    <p>${textoIntervalo}</p>
+                    <p><b>⏱️ Total:</b> ${formatarHoras(totalMinutosTrabalho)}</p>
+                    <p>🕒 Intervalo: ${formatarHoras(minutosIntervalo)} ${minutosIntervalo > 120 ? '(>2h)' : ''}</p>
                     <p>${textoJornada}</p>
                 `;
 
-                // SÓ estoura as pérolas se o total trabalhado for EXATAMENTE igual à jornada escolhida!
                 if (bateuMeta && typeof confetti === 'function') {
                     confetti({
-                        particleCount: 200,
+                        particleCount: 100,
                         spread: 90,
-                        origin: { y: 0.9 },
+                        origin: { y: 0.7 },
                         shapes: ['circle'],
-                        colors: ['#ffbe0b','#ffbe0b', '#ffffff', '#00ffcc']
+                        colors: ['#00e5ff', '#ffbe0b', '#ffffff']
                     });
                 }
             });
         });
     </script>
-
 </body>
 </html>
 
